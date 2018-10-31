@@ -1,0 +1,36 @@
+#!/bin/bash
+#
+# Simple tool to prepare or remove a temporary working directory for a Kattis problem
+#
+
+print_usage () {
+    echo $"Usage: $0 get|rm problem"
+    exit 1
+}
+
+if [ -z $1 ] || [ -z $2 ]
+then
+    print_usage
+else
+    if [ -z $3 ]
+    then
+        COMMAND=$1
+        PROBLEM=$2
+    else
+        print_usage
+    fi
+fi
+
+case "$COMMAND" in
+    get)
+        mkdir $PROBLEM
+        wget https://open.kattis.com/problems/$PROBLEM/file/statement/samples.zip -O $PROBLEM/samples.zip
+        unzip $PROBLEM/samples.zip -d $PROBLEM/
+        echo "# https://open.kattis.com/problems/$PROBLEM" > $PROBLEM/$PROBLEM.py
+        ;;
+    rm)
+        rm -rf $PROBLEM/
+        ;;
+    *)
+        print_usage
+esac
