@@ -26,7 +26,7 @@ case "$COMMAND" in
         mkdir $PROBLEM
         wget https://open.kattis.com/problems/$PROBLEM/file/statement/samples.zip -O $PROBLEM/samples.zip
         unzip $PROBLEM/samples.zip -d $PROBLEM/
-        echo "# https://open.kattis.com/problems/$PROBLEM" > $PROBLEM/$PROBLEM.py
+        printf "# https://open.kattis.com/problems/%s\n\nfrom sys import stdin" "$PROBLEM" > $PROBLEM/$PROBLEM.py
         ;;
     rm)
         rm -rf $PROBLEM/
