@@ -4,7 +4,14 @@
 #
 
 print_usage () {
-    echo $"Usage: $0 get|rm problem"
+    if [ -z ${1+x} ]
+    then
+        :
+    else
+        printf "Error: %s\n\n" "$1"
+    fi
+
+    printf "Usage: kattis get|rm problem\n"
     exit 1
 }
 
