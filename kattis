@@ -20,10 +20,23 @@ get_problem () {
     PROBLEM_URL="https://open.kattis.com/problems/$PROBLEM"
     SAMPLE_URL="$PROBLEM_URL/file/statement/samples.zip"
     ZIP_FILE="$PROBLEM/samples.zip"
-    mkdir $PROBLEM
-    wget $SAMPLE_URL -O $ZIP_FILE
-    unzip $ZIP_FILE -d $PROBLEM/
+
+    if [ -d $PROBLEM ]
+    then
+        print_usage "Problem '$PROBLEM' appears to already be downloaded"
+    else
+        mkdir $PROBLEM
+    fi
+
+    wget -q $SAMPLE_URL -O $ZIP_FILE
+    if [ $? -ne 0 ]
+    then
+        rm -rf $PROBLEM/
+        print_usage "Problem '$PROBLEM' could not be downloaded, does it exist?"
+    fi
+    unzip -q $ZIP_FILE -d $PROBLEM/
     printf "# %s%s\n\nfrom sys import stdin" "$KATTIS_URL" > $PROBLEM/$PROBLEM.py
+    printf "Problem %s successfully downloaded" "$PROBLEM"
 }
 
 test_problem () {
