@@ -68,6 +68,17 @@ test_problem () {
     printf "====="
 }
 
+rm_problem () {
+    PROBLEM=$1
+    if [ -d $PROBLEM ]
+    then
+        rm -rf $PROBLEM/
+        printf "Problem '%s' has been removed" "$PROBLEM"
+    else
+        print_usage "Problem '$PROBLEM' does not appear to be downloaded"
+    fi
+}
+
 if [ -z ${1+x} ]
 then
     print_usage "No command given"
@@ -91,7 +102,7 @@ case "$COMMAND" in
         get_problem $PROBLEM
         ;;
     rm)
-        rm -rf $PROBLEM/
+        rm_problem $PROBLEM
         ;;
     test)
         test_problem $PROBLEM
