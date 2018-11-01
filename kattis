@@ -55,7 +55,7 @@ test_problem () {
         printf "=====\n\nTEST CASE #%s\n\n-----\n\n" "$N"
         printf "INPUT:\n\n%s\n\n-----\n\n" "$(cat $PROBLEM/$CASE.in)"
         printf "OUTPUT:\n\n%s\n\n-----\n\n" "$OUTPUT"
-        OUT_HASH=$(echo $OUTPUT | shasum)
+        OUT_HASH=$(echo "$OUTPUT" | shasum)
         ANS_HASH=$(cat $PROBLEM/$CASE.ans | shasum)
         if [ "$OUT_HASH" = "$ANS_HASH" ]
         then
