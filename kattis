@@ -8,6 +8,17 @@ print_usage () {
     exit 1
 }
 
+get_problem () {
+    PROBLEM=$1
+    PROBLEM_URL="https://open.kattis.com/problems/$PROBLEM"
+    SAMPLE_URL="$PROBLEM_URL/file/statement/samples.zip"
+    ZIP_FILE="$PROBLEM/samples.zip"
+    mkdir $PROBLEM
+    wget $SAMPLE_URL -O $ZIP_FILE
+    unzip $ZIP_FILE -d $PROBLEM/
+    printf "# %s%s\n\nfrom sys import stdin" "$KATTIS_URL" > $PROBLEM/$PROBLEM.py
+}
+
 if [ -z $1 ] || [ -z $2 ]
 then
     print_usage
@@ -23,10 +34,7 @@ fi
 
 case "$COMMAND" in
     get)
-        mkdir $PROBLEM
-        wget https://open.kattis.com/problems/$PROBLEM/file/statement/samples.zip -O $PROBLEM/samples.zip
-        unzip $PROBLEM/samples.zip -d $PROBLEM/
-        printf "# https://open.kattis.com/problems/%s\n\nfrom sys import stdin" "$PROBLEM" > $PROBLEM/$PROBLEM.py
+        get_problem $PROBLEM
         ;;
     rm)
         rm -rf $PROBLEM/
