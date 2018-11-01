@@ -19,6 +19,35 @@ get_problem () {
     printf "# %s%s\n\nfrom sys import stdin" "$KATTIS_URL" > $PROBLEM/$PROBLEM.py
 }
 
+test_problem () {
+    if [ ! -d $1 ]
+    then
+        print_usage
+    fi
+
+    PROBLEM=$1
+    TEST_CASES=($(ls $PROBLEM/ | grep .in$ | sed s/.in//))
+    N=1
+
+    for CASE in "${TEST_CASES[@]}"
+    do
+        OUTPUT=$(cat $PROBLEM/$CASE.in | python2 $PROBLEM/$PROBLEM.py)
+        printf "=====\n\nTEST CASE #%s\n\n-----\n\n" "$N"
+        printf "INPUT:\n\n%s\n\n-----\n\n" "$(cat $PROBLEM/$CASE.in)"
+        printf "OUTPUT:\n\n%s\n\n-----\n\n" "$OUTPUT"
+        OUT_HASH=$(echo $OUTPUT | shasum)
+        ANS_HASH=$(cat $PROBLEM/$CASE.ans | shasum)
+        if [ "$OUT_HASH" = "$ANS_HASH" ]
+        then
+            printf "\e[92mTEST #%s PASSED\e[39m\n\n" "$N"
+        else
+            printf "\e[91mTEST #%s NOT PASSED\e[39m\n\n" "$N"
+        fi
+        ((N++))
+    done
+    printf "====="
+}
+
 if [ -z $1 ] || [ -z $2 ]
 then
     print_usage
@@ -38,6 +67,9 @@ case "$COMMAND" in
         ;;
     rm)
         rm -rf $PROBLEM/
+        ;;
+    test)
+        test_problem $PROBLEM
         ;;
     *)
         print_usage
