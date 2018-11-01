@@ -11,7 +11,7 @@ print_usage () {
         printf "Error: %s\n\n" "$1"
     fi
 
-    printf "Usage: kattis get|rm problem\n"
+    printf "Usage: kattis get|test|rm problem\n"
     exit 1
 }
 
