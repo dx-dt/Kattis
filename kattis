@@ -29,7 +29,7 @@ get_problem () {
 test_problem () {
     if [ ! -d $1 ]
     then
-        print_usage
+        print_usage "No problem with name '$1' has been downloaded"
     fi
 
     PROBLEM=$1
@@ -55,16 +55,21 @@ test_problem () {
     printf "====="
 }
 
-if [ -z $1 ] || [ -z $2 ]
+if [ -z $1 ]
 then
-    print_usage
+    print_usage "No command given"
 else
-    if [ -z $3 ]
+    if [ -z $2 ]
     then
-        COMMAND=$1
-        PROBLEM=$2
+        print_usage "No problem name given"
     else
-        print_usage
+        if [ -z $3 ]
+        then
+            COMMAND=$1
+            PROBLEM=$2
+        else
+            print_usage "Too many arguments given"
+        fi
     fi
 fi
 
@@ -79,5 +84,5 @@ case "$COMMAND" in
         test_problem $PROBLEM
         ;;
     *)
-        print_usage
+        print_usage "Command '$COMMAND' is not recognized"
 esac
