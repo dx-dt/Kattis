@@ -111,11 +111,11 @@ else
 fi
 
 case "$COMMAND" in
-    get)
-        get_problem $PROBLEM
-        ;;
     rm)
         rm_problem $PROBLEM
+        ;;
+    get)
+        get_problem $PROBLEM
         ;;
     test)
         test_problem $PROBLEM
