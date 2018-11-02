@@ -11,7 +11,7 @@ print_usage () {
         printf "Error: %s\n\n" "$1"
     fi
 
-    printf "Usage: kattis get|test|rm problem\n"
+    printf "Usage: kattis get|test|rm|finish problem\n"
     exit 1
 }
 
@@ -79,6 +79,19 @@ rm_problem () {
     fi
 }
 
+finish_problem () {
+    PROBLEM=$1
+    if [ -e "$PROBLEM/$PROBLEM.py" ]
+    then
+        mv $PROBLEM/$PROBLEM.py solutions/
+        git add solutions/$PROBLEM.py
+        git commit -m "Added solution in Python for problem '$PROBLEM'."
+        rm_problem $PROBLEM
+    else
+        print_usage "Solution $PROBLEM/$PROBLEM.py could not be found"
+    fi
+}
+
 if [ -z ${1+x} ]
 then
     print_usage "No command given"
@@ -106,6 +119,9 @@ case "$COMMAND" in
         ;;
     test)
         test_problem $PROBLEM
+        ;;
+    finish)
+        finish_problem $PROBLEM
         ;;
     *)
         print_usage "Command '$COMMAND' is not recognized"
